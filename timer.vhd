@@ -1,5 +1,5 @@
 --
--- Timer T is a 10-bit up counter to control the CLU
+-- Timer T is a 0-9 up counter to control the CLU
 --
 ENTITY timer IS
 	PORT (
