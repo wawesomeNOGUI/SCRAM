@@ -79,6 +79,7 @@ char t[];
             }
             s++;    // remove newline from line label
             labelLocations[hash%HASHSIZE] = line;
+            // printf("\n\n%d\n\n", line);
         }
 
         *t++ = *s++;
@@ -138,8 +139,9 @@ main() {
 
   removeComments(inputBufOne, inputBufTwo);
 
-  int progLength = storeAssemLables(inputBufTwo, inputBufOne);
-  int numOfVars = storeVariables(inputBufOne, inputBufTwo);
+  int numOfVars = storeVariables(inputBufTwo, inputBufOne);
+  int progLength = storeAssemLables(inputBufOne, inputBufTwo);
+  progLength += numOfVars;
 
   printf("PROGRAM LENGTH: %d OF 15 AVAILABLE LINES USED.\nTHERE ARE %d VARS DECLARED.\n\n", progLength, numOfVars);
 
