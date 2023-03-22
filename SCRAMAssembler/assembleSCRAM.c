@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "util.c"
 
 #define MAXINPUT 100000
@@ -29,6 +30,7 @@ char labelLocations[HASHSIZE];
 
 char machineCode[PROGLENGTH];
 
+// comments are written in format: ;comment
 removeComments(s, t)
 char s[];
 char t[];
@@ -59,7 +61,8 @@ char t[];
     *--t = EOF;  // decremented to remove trailing newline
 }
 
-storeAssemLables(s, t)
+// labels are written in format: .LABEL  
+storeAssemLables(s, t)  /* returns length of program */
 char s[];
 char t[];
 {
@@ -75,7 +78,7 @@ char t[];
                 hash += *s++;
             }
             s++;    // remove newline from line label
-            tempInput[hash%HASHSIZE] = line;
+            labelLocations[hash%HASHSIZE] = line;
         }
 
         *t++ = *s++;
@@ -84,24 +87,65 @@ char t[];
     return line;
 }
 
-storeVariables(s, t)    /* we'll store varaibles at the end of the code*/
+// vars are written in format: x = 0000 
+// vars can only be named by a single non numeric character  
+// we'll store varaibles at the end of the code
+storeVariables(s, t)    /* returns number of variables */
 char s[];
 char t[];
 {
-    
+    int numOfVars = 0;
+    while (*s != EOF) {
+        if ( (*s > '9' || s < '0') && *(s+1) == '=' ) { // var names can't be numbers
+            numOfVars++;
+            int hash = *s;
+            s++;
+            s++; // ignore equals sign
+
+            // check number format
+            char *end;
+            long ret;
+            if (*s == '%') {
+                s++;
+                // convert binary string to int
+                ret = strtol(s, &end, 2);
+            } else if (*s == '$') {
+                s++;
+                // convert hex string to int
+                ret = strtol(s, &end, 16);
+            } else {
+                // assume decimal (base 10)
+                ret = strtol(s, &end, 10);
+            }
+            s = end;
+            if (*s != '\n')
+                printf("\nERROR: NO NEWLINE AFTER VAR\n");
+            s++;
+
+            machineCode[PROGLENGTH-numOfVars] = ret;
+            varLocations[hash] = PROGLENGTH-numOfVars;
+        } else {
+            *t++ = *s++;
+        }
+    }
+    *t = EOF;
+    return numOfVars;
 }
 
 main() {
   /* assemble programs writen for the SCRAM computer */
-  int newlines = getInputAndRemoveWhitespace(inputBufOne);
+  getInputAndRemoveWhitespace(inputBufOne);
+
   removeComments(inputBufOne, inputBufTwo);
+
   int progLength = storeAssemLables(inputBufTwo, inputBufOne);
-  printf("PROGRAM LENGTH: %d OF 15 AVAILABLE LINES USED.\n\n", progLength);
+  int numOfVars = storeVariables(inputBufOne, inputBufTwo);
 
-  char *start = inputBufOne;
+  printf("PROGRAM LENGTH: %d OF 15 AVAILABLE LINES USED.\nTHERE ARE %d VARS DECLARED.\n\n", progLength, numOfVars);
+
+
+  char *start = inputBufTwo;
   char *look = start;
-
- 
 
   // parse assembly program
   while (*look != EOF) {
