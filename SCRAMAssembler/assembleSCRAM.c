@@ -53,12 +53,16 @@ char t[];
                 s++;
             }
             if (!inlineComment) {
-                s++;    // remove newline from comment
+                s++;    // remove newline from comment and any sequential newlines
+                if (*s == '\n')
+                    while (*++s == '\n') {};
             }
         }
     }
 
-    *--t = EOF;  // decremented to remove trailing newline
+    if (*(t-1) == '\n')
+        *--t = EOF;
+    *t = EOF;
 }
 
 // labels are written in format: .LABEL  
@@ -118,6 +122,8 @@ char t[];
                 // assume decimal (base 10)
                 ret = strtol(s, &end, 10);
             }
+            // printf("\n\n%d\n\n", ret);
+
             s = end;
             if (*s != '\n')
                 printf("\nERROR: NO NEWLINE AFTER VAR\n");

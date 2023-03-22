@@ -1,8 +1,9 @@
 ; define variables (stored in machine code in format 0000xxxx)
 ; make sure to leave enough mem to store them at end of program
-; % denotes number in binary, $ hex, otherwise assumed decimal 
+; % denotes number in binary, $ hex, otherwise assumed decimal  
+; can declare variables anywhere in the program except at the bottom
+
 x = %0011
-c = $3
 y = 1
 
 ; three countdown program
@@ -13,10 +14,9 @@ STA x
 JMZ STORE   ; if countdown reached 0 roll back to three
 JMP START
 
+c = $3
+
 .STORE
 LDA c
 STA x
 JMP START
-
-
-
