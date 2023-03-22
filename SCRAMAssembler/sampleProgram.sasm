@@ -1,0 +1,21 @@
+; define variables (stored in machine code in format 0000xxxx)
+; make sure to leave enough mem to store them at end of program
+x = 0011
+c = 0011
+y = 0001
+
+; three countdown program
+.START
+LDA x
+SUB y   ; decrement x
+STA x
+JMZ STORE   ; if countdown reached 0 roll back to three
+JMP START
+
+.STORE
+LDA c
+STA x
+JMP START
+
+
+
