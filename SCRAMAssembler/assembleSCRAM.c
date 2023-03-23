@@ -62,8 +62,8 @@ char t[];
         }
     }
 
-    if (*(t-1) == '\n')
-        *--t = EOF;
+    if (*(t-1) != '\n')
+         *t++ = '\n';
     *t = EOF;
 }
 
@@ -246,6 +246,7 @@ main() {
   while (*look != EOF) {
     printf("%c", *look++);
   }
+  printf("\n");
 
   parseInstructions(inputBufTwo);
 

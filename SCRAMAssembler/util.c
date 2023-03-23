@@ -135,10 +135,10 @@ char labelmap[];
 {
   int retINSTRUCT = 0;
   //check if operand variable, label, or literal number
-  int labelHash = isLabel(o); 
+  int labelHash = isLabel(o);
   if (isVar(o)) {
     retINSTRUCT = c | varmap[*o];
-    o++;
+    // o++;
   } else if (labelHash) {
     retINSTRUCT = c | labelmap[labelHash%HASHSIZE];
   } else {
@@ -147,7 +147,7 @@ char labelmap[];
     long ret;
     ret = getLongFromNumString(o, &end);
     o = end;
-    o++;
+    // o++;
 
     retINSTRUCT = c | ret;
   }
