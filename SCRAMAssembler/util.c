@@ -1,3 +1,5 @@
+#define HASHSIZE 256
+
 getline(s, lim)   /* get line into s, return length */
 char s[];
 int lim;
@@ -66,6 +68,91 @@ char s[];
     }
 
   return 1;
+}
+
+intToBin8(n, s) /* returns 8-bit representation of int */
+int n;
+char s[];
+{
+  for (int i = 1 << 7; i > 0; i = i >> 1) {
+    if ((i & n) != 0) {
+      *s++ = '1';
+    } else {
+      *s++ = '0';
+    }
+    //printf("%c", *(s-1));    
+  }
+}
+
+long getLongFromNumString(s, end)  /* Returns a long from bin/hex/dec number string */
+char s[];
+char **end;
+{
+  if (*s == '%') {
+    s++;
+    // convert binary string to int
+    return strtol(s, end, 2);
+  } else if (*s == '$') {
+    s++;
+    // convert hex string to int
+    return strtol(s, end, 16);
+  } else {
+    // assume decimal (base 10)
+    return strtol(s, end, 10);
+  }
+}
+
+isLabel(s) /* returns 0 if not label, else returns hash for the label */
+char s[];
+{
+  if (*s == '.') {
+    s++;
+    int hash = 0;
+    while (*s != '\n') {
+        hash += *s++;
+    }
+    return hash;
+  } else {
+    return 0;
+  }
+}
+
+isVar(s)
+char s[];
+{
+  if (isalpha(*s)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+mergeOPCODEandOPERAND(c, o, varmap, labelmap) /* returns merged opcode and operand */
+int c;
+char o[];
+char varmap[];
+char labelmap[];
+{
+  int retINSTRUCT = 0;
+  //check if operand variable, label, or literal number
+  int labelHash = isLabel(o); 
+  if (isVar(o)) {
+    retINSTRUCT = c | varmap[*o];
+    o++;
+  } else if (labelHash) {
+    retINSTRUCT = c | labelmap[labelHash%HASHSIZE];
+  } else {
+    // check number format (in util.c)
+    char *end;
+    long ret;
+    ret = getLongFromNumString(o, &end);
+    o = end;
+    o++;
+
+    retINSTRUCT = c | ret;
+  }
+
+  return retINSTRUCT;
 }
 
 getInputAndRemoveWhitespace(s)  /* returns number of newlines */

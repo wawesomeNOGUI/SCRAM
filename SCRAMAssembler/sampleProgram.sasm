@@ -11,12 +11,12 @@ y = 1
 LDA x
 SUB y   ; decrement x
 STA x
-JMZ STORE   ; if countdown reached 0 roll back to three
-JMP START
+JMZ .STORE   ; if countdown reached 0 roll back to three
+JMP .START
 
 c = $3
 
 .STORE
 LDA c
 STA x
-JMP START
+JMP .START
