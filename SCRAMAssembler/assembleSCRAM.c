@@ -259,4 +259,19 @@ main() {
     }
     printf("\n");
   }
+
+  // print machine code in VHDL format
+  printf("\nFOR VHDL:\n");
+  printf("(");
+  for (int j = 0; j < MAXPROGLENGTH; j++) {
+    printf("(\"");
+    intToBin8(machineCode[j], tmpBin);
+    for (int i = 0; i < 8; i++) {
+        printf("%c", tmpBin[i]);
+    }
+    printf("\"),");
+  }
+  printf("\b");
+  printf(");");
+  printf("\n");
 }
