@@ -1,0 +1,12 @@
+; define variables (stored in machine code in format 0000xxxx)
+; make sure to leave enough mem to store them at end of program
+; % denotes number in binary, $ hex, otherwise assumed decimal
+
+;================BLINKY HELLO WORLD===============
+x = 1
+y = 0
+
+.START
+LDA x
+LDA y
+JMP .START
