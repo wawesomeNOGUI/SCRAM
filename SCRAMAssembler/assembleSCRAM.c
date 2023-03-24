@@ -151,9 +151,6 @@ char s[];
                 machineCode[numOfOpcodes] = mergeOPCODEandOPERAND(LDI, s, varLocations, labelLocations);
             }
             numOfOpcodes++;
-            while (*s != '\n') {
-                s++;
-            }
             break;
         case 'S':
             s++;
@@ -162,9 +159,6 @@ char s[];
                 s++;
                 machineCode[numOfOpcodes] = mergeOPCODEandOPERAND(SUB, s, varLocations, labelLocations);
                 numOfOpcodes++;
-                while (*s != '\n') {
-                    s++;
-                }
                 break;
             }
 
@@ -177,9 +171,6 @@ char s[];
                 machineCode[numOfOpcodes] = mergeOPCODEandOPERAND(STI, s, varLocations, labelLocations);
             }
             numOfOpcodes++;
-            while (*s != '\n') {
-                s++;
-            }
             break;
         case 'A':
             s++;
@@ -187,9 +178,6 @@ char s[];
             s++;
             machineCode[numOfOpcodes] = mergeOPCODEandOPERAND(ADD, s, varLocations, labelLocations);
             numOfOpcodes++;
-            while (*s != '\n') {
-                s++;
-            }
             break;
         case 'J':
             s++;
@@ -202,9 +190,6 @@ char s[];
                 machineCode[numOfOpcodes] = mergeOPCODEandOPERAND(JMZ, s, varLocations, labelLocations);
             }
             numOfOpcodes++;
-            while (*s != '\n') {
-                s++;
-            }
             break;
         default:
             printf("\033[0;31m"); //Set the text to the color red
@@ -213,18 +198,16 @@ char s[];
             return;
         }
 
-        // increment past newline
+        // increment past operand and newline
+        while (*s != '\n') {
+            s++;
+        }
+        
         if (*s == '\n') {
             s++;
         } else {
             printf("%c", *s);
         }
-
-        // intToBin8(machineCode[numOfOpcodes-1], tmpBin);
-        // for (int i = 0; i < 8; i++) {
-        //     printf("%c", tmpBin[i]);
-        // }
-        // printf("\n");
     }
 }
 
