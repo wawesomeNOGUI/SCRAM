@@ -6,7 +6,6 @@
 #define MAXINPUT 100000
 #define MAXPROGLENGTH 16
 #define HASHSIZE 256
-#define TMPSIZE 20  // no command should be over 20 characters
 
 // OPCODES bitwise OR with operands
 #define LDA 0b00010000
@@ -20,7 +19,6 @@
 
 char inputBufOne[MAXINPUT];
 char inputBufTwo[MAXINPUT];
-char tempInput[TMPSIZE];
 
 // variables & labels indexed by "hashmap" which will be 
 // their string summed, modulo HASHSIZE
@@ -254,7 +252,5 @@ main() {
     }
     printf("\"),");
   }
-  printf("\b");
-  printf(");");
-  printf("\n");
+  printf("\b);\n");
 }
